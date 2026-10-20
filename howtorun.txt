@@ -1,0 +1,103 @@
+================================================================
+  HOW TO RUN - Store (Laravel + React + Docker)
+================================================================
+
+STEP 1 - Start all containers
+----------------------------------------------------------------
+docker compose up -d
+
+Wait until all 5 containers are running:
+  - store-nginx-1
+  - store-php-1
+  - store-node-1
+  - store-mysql-1
+  - store-phpmyadmin-1
+
+Check status anytime with:
+  docker compose ps
+
+
+STEP 2 - Install dependencies (first time only)
+----------------------------------------------------------------
+docker compose exec php composer install
+docker compose exec php npm install
+
+
+STEP 3 - Run database migrations (first time only)
+----------------------------------------------------------------
+docker compose exec php php artisan migrate --seed
+
+  If asked "run in production?" type: yes
+
+
+STEP 4 - Fix storage permissions (only if you see permission errors)
+----------------------------------------------------------------
+docker compose exec php chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+docker compose exec php chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+
+STEP 5 - Set up Square Sandbox credentials (first time only)
+----------------------------------------------------------------
+1. Go to https://developer.squareup.com/apps
+2. Create a new application (or use an existing one)
+3. Switch to "Sandbox" mode in the dashboard
+4. Copy the following from Credentials:
+     - Sandbox Application ID
+     - Sandbox Access Token
+5. Go to Locations and copy a Sandbox Location ID
+6. Paste them into app/.env:
+     SQUARE_APPLICATION_ID=your_sandbox_application_id
+     SQUARE_ACCESS_TOKEN=your_sandbox_access_token
+     SQUARE_LOCATION_ID=your_sandbox_location_id
+7. Clear the config cache:
+     docker compose exec php php artisan config:clear
+
+
+STEP 6 - Start the Vite frontend   KEEP THIS TERMINAL OPEN
+----------------------------------------------------------------
+docker compose exec php npm run dev
+
+You should see:
+  VITE ready in xxxx ms
+  Local: http://localhost:5171/
+
+
+================================================================
+  YOUR URLS
+================================================================
+
+  Store        ->  http://localhost:8001
+  Admin Panel  ->  http://localhost:8001/admin/login
+  phpMyAdmin   ->  http://localhost:8881
+
+  Admin login  ->  username: admin  |  password: admin
+
+
+================================================================
+  TEST SQUARE PAYMENT
+================================================================
+
+1. Go to http://localhost:8001 and click "Buy Now" on any product
+2. Fill in your name and email
+3. Enter a Square sandbox test card in the card form:
+     - Card number: 4532 0000 0000 0000
+     - Expiry: any future date (e.g. 12/26)
+     - CVV: any 3 digits (e.g. 111)
+     - ZIP: any 5 digits (e.g. 10001)
+4. Click the "Pay" button
+
+More sandbox test cards:
+  https://developer.squareup.com/docs/devtools/sandbox/payments
+
+The admin payments page updates live without refreshing:
+  http://localhost:8001/admin/payments
+
+
+================================================================
+  STOP EVERYTHING
+================================================================
+
+  docker compose down
+
+
+================================================================
