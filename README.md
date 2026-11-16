@@ -50,7 +50,7 @@ The admin panel is served by nginx at http://localhost:8001/admin/login.
 
 ## Environment
 
-Env values live in per-service `.env` files (already present in the repo); there is no root `.env.example`.
+Env values live in per-service `.env` files: copy each `.env.example` (root, `app/`, `realtime/`) to `.env` and fill in your own values.
 
 ### `app/.env` (Laravel)
 
