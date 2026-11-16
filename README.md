@@ -160,3 +160,7 @@ curl -I http://localhost:8881              # phpMyAdmin  -> 200
 - **Live payments:** the admin payments page at http://localhost:8001/admin/payments updates in real time as orders come in.
 
 To test a payment, click **Buy Now** on a product and use a Square sandbox card such as `4532 0000 0000 0000` (any future expiry, any CVV, any ZIP). More cards: https://developer.squareup.com/docs/devtools/sandbox/payments
+
+## License
+
+MIT — see [LICENSE](LICENSE).
