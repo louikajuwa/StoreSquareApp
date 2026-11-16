@@ -4,7 +4,7 @@
     "description": "E-Commerce Store",
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^12.71",
         "inertiajs/inertia-laravel": "^1.0",
         "square/square": "^39"
     },
